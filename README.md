@@ -2,7 +2,7 @@
 
 # Graphene-Mongo
 
-A [Mongoengine](https://mongoengine-odm.readthedocs.io/) integration for [Graphene](http://graphene-python.org/).
+A [Mongoengine](https://motorengine-odm.readthedocs.io/) integration for [Graphene](http://graphene-python.org/).
 
 
 ## Installation
@@ -18,8 +18,8 @@ pip install graphene-motorengine
 Here is a simple Mongoengine model as `models.py`:
 
 ```python
-from mongoengine import Document
-from mongoengine.fields import StringField
+from motorengine import Document
+from motorengine.fields import StringField
 
 class User(Document):
     meta = {'collection': 'user'}
@@ -65,9 +65,9 @@ result = schema.execute(query)
 
 To learn more check out the following [examples](examples/):
 
-* [Flask MongoEngine example](examples/flask_mongoengine)
-* [Django MongoEngine example](examples/django_mongoengine)
-* [Falcon MongoEngine example](examples/falcon_mongoengine)
+* [Flask MongoEngine example](examples/flask_motorengine)
+* [Django MongoEngine example](examples/django_motorengine)
+* [Falcon MongoEngine example](examples/falcon_motorengine)
 
 
 ## Contributing

@@ -10,7 +10,7 @@
 Graphene-Mongo
 ==============
 
-A `Mongoengine <https://mongoengine-odm.readthedocs.io/>`__ integration for `Graphene <http://graphene-python.org/>`__.
+A `Mongoengine <https://motorengine-odm.readthedocs.io/>`__ integration for `Graphene <http://graphene-python.org/>`__.
 
 Installation
 ------------
@@ -28,8 +28,8 @@ Here is a simple Mongoengine model as `models.py`:
 
 .. code:: python
 
-    from mongoengine import Document
-    from mongoengine.fields import StringField
+    from motorengine import Document
+    from motorengine.fields import StringField
 
     class User(Document):
         meta = {'collection': 'user'}
@@ -73,5 +73,5 @@ Then you can simply query the schema:
     '''
     result = schema.execute(query)
 
-To learn more check out the `Flask MongoEngine example <https://github.com/graphql-python/graphene-motorengine/tree/master/examples/flask_mongoengine>`__
+To learn more check out the `Flask MongoEngine example <https://github.com/graphql-python/graphene-motorengine/tree/master/examples/flask_motorengine>`__
 

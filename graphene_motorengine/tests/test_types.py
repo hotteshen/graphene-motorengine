@@ -46,7 +46,7 @@ class Son(MongoengineObjectType):
         registry = registry.get_global_registry()
 
 
-def test_mongoengine_interface():
+def test_motorengine_interface():
     assert issubclass(Node, Interface)
     assert issubclass(Node, Node)
 
@@ -71,7 +71,7 @@ def test_objecttype_registered():
     )
 
 
-def test_mongoengine_inheritance():
+def test_motorengine_inheritance():
     assert issubclass(Son._meta.model, Dad._meta.model)
 
 
@@ -109,7 +109,7 @@ def test_should_raise_if_model_is_invalid():
 
 
 @with_local_registry
-def test_mongoengine_objecttype_only_fields():
+def test_motorengine_objecttype_only_fields():
     class A(MongoengineObjectType):
         class Meta:
             model = Article
@@ -120,7 +120,7 @@ def test_mongoengine_objecttype_only_fields():
 
 
 @with_local_registry
-def test_mongoengine_objecttype_exclude_fields():
+def test_motorengine_objecttype_exclude_fields():
     class A(MongoengineObjectType):
         class Meta:
             model = Article
@@ -130,7 +130,7 @@ def test_mongoengine_objecttype_exclude_fields():
 
 
 @with_local_registry
-def test_passing_meta_when_subclassing_mongoengine_objecttype():
+def test_passing_meta_when_subclassing_motorengine_objecttype():
     class TypeSubclassWithBadOptions(MongoengineObjectType):
         class Meta:
             abstract = True

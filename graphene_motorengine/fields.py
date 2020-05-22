@@ -4,7 +4,7 @@ from collections import OrderedDict
 from functools import partial, reduce
 
 import graphene
-import mongoengine
+import motorengine
 from promise import Promise
 from graphene.relay import ConnectionField
 from graphene.types.argument import to_arguments
@@ -13,7 +13,7 @@ from graphene.types.structures import Structure
 from graphql_relay.connection.arrayconnection import connection_from_list_slice
 
 from .advanced_types import FileFieldType, PointFieldType, MultiPolygonFieldType
-from .converter import convert_mongoengine_field, MongoEngineConversionError
+from .converter import convert_motorengine_field, MongoEngineConversionError
 from .registry import get_global_registry
 from .utils import get_model_reference_fields, get_node_from_global_id
 
@@ -81,7 +81,7 @@ class MongoengineConnectionField(ConnectionField):
             if isinstance(getattr(self.model, k), property):
                 return False
             try:
-                converted = convert_mongoengine_field(
+                converted = convert_motorengine_field(
                     getattr(self.model, k), self.registry
                 )
             except MongoEngineConversionError:
@@ -145,15 +145,15 @@ class MongoengineConnectionField(ConnectionField):
             mongo_field = getattr(self.model, kv[0], None)
             if isinstance(
                 mongo_field,
-                (mongoengine.LazyReferenceField, mongoengine.ReferenceField),
+                (motorengine.LazyReferenceField, motorengine.ReferenceField),
             ):
-                field = convert_mongoengine_field(mongo_field, self.registry)
+                field = convert_motorengine_field(mongo_field, self.registry)
             if callable(getattr(field, "get_type", None)):
                 _type = field.get_type()
                 if _type:
                     node = _type._type._meta
                     if "id" in node.fields and not issubclass(
-                        node.model, (mongoengine.EmbeddedDocument,)
+                        node.model, (motorengine.EmbeddedDocument,)
                     ):
                         r.update({kv[0]: node.fields["id"]._type.of_type()})
             return r
@@ -178,7 +178,7 @@ class MongoengineConnectionField(ConnectionField):
 
         if self._get_queryset:
             queryset_or_filters = self._get_queryset(model, info, **args)
-            if isinstance(queryset_or_filters, mongoengine.QuerySet):
+            if isinstance(queryset_or_filters, motorengine.QuerySet):
                 return queryset_or_filters
             else:
                 args.update(queryset_or_filters)

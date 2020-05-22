@@ -1,5 +1,5 @@
 import graphene
-import mongoengine
+import motorengine
 
 from collections import OrderedDict
 from graphene.relay import Connection, Node
@@ -7,15 +7,15 @@ from graphene.types.objecttype import ObjectType, ObjectTypeOptions
 from graphene.types.utils import yank_fields_from_attrs
 
 from graphene_motorengine import MongoengineConnectionField
-from .converter import convert_mongoengine_field
+from .converter import convert_motorengine_field
 from .registry import Registry, get_global_registry
-from .utils import get_model_fields, is_valid_mongoengine_model
+from .utils import get_model_fields, is_valid_motorengine_model
 
 
 def construct_fields(model, registry, only_fields, exclude_fields):
     """
     Args:
-        model (mongoengine.Document):
+        model (motorengine.Document):
         registry (graphene_motorengine.registry.Registry):
         only_fields ([str]):
         exclude_fields ([str]):
@@ -34,7 +34,7 @@ def construct_fields(model, registry, only_fields, exclude_fields):
             # We skip this field if we specify only_fields and is not
             # in there. Or when we exclude this field in exclude_fields
             continue
-        if isinstance(field, mongoengine.ListField):
+        if isinstance(field, motorengine.ListField):
             if not field.field:
                 continue
             # Take care of list of self-reference.
@@ -46,7 +46,7 @@ def construct_fields(model, registry, only_fields, exclude_fields):
             ):
                 self_referenced[name] = field
                 continue
-        converted = convert_mongoengine_field(field, registry)
+        converted = convert_motorengine_field(field, registry)
         if not converted:
             continue
         fields[name] = converted
@@ -57,7 +57,7 @@ def construct_fields(model, registry, only_fields, exclude_fields):
 def construct_self_referenced_fields(self_referenced, registry):
     fields = OrderedDict()
     for name, field in self_referenced.items():
-        converted = convert_mongoengine_field(field, registry)
+        converted = convert_motorengine_field(field, registry)
         if not converted:
             continue
         fields[name] = converted
@@ -92,7 +92,7 @@ class MongoengineObjectType(ObjectType):
         **options
     ):
 
-        assert is_valid_mongoengine_model(model), (
+        assert is_valid_motorengine_model(model), (
             "The attribute model in {}.Meta must be a valid Mongoengine Model. "
             'Received "{}" instead.'
         ).format(cls.__name__, type(model))
@@ -107,7 +107,7 @@ class MongoengineObjectType(ObjectType):
         converted_fields, self_referenced = construct_fields(
             model, registry, only_fields, exclude_fields
         )
-        mongoengine_fields = yank_fields_from_attrs(
+        motorengine_fields = yank_fields_from_attrs(
             converted_fields, _as=graphene.Field
         )
         if use_connection is None and interfaces:
@@ -148,7 +148,7 @@ class MongoengineObjectType(ObjectType):
 
         _meta.model = model
         _meta.registry = registry
-        _meta.fields = mongoengine_fields
+        _meta.fields = motorengine_fields
         _meta.filter_fields = filter_fields
         _meta.connection = connection
         _meta.connection_field_class = connection_field_class
@@ -167,10 +167,10 @@ class MongoengineObjectType(ObjectType):
                 self_referenced, registry
             )
             if converted_fields:
-                mongoengine_fields = yank_fields_from_attrs(
+                motorengine_fields = yank_fields_from_attrs(
                     converted_fields, _as=graphene.Field
                 )
-                cls._meta.fields.update(mongoengine_fields)
+                cls._meta.fields.update(motorengine_fields)
                 registry.register(cls)
 
     @classmethod
@@ -184,14 +184,14 @@ class MongoengineObjectType(ObjectType):
             cls._meta.exclude_fields,
         )
 
-        mongoengine_fields = yank_fields_from_attrs(
+        motorengine_fields = yank_fields_from_attrs(
             converted_fields, _as=graphene.Field
         )
 
         # The initial scan should take precedence
-        for field in mongoengine_fields:
+        for field in motorengine_fields:
             if field not in cls._meta.fields:
-                cls._meta.fields.update({field: mongoengine_fields[field]})
+                cls._meta.fields.update({field: motorengine_fields[field]})
         # Self-referenced fields can't change between scans!
 
     @classmethod
@@ -199,9 +199,9 @@ class MongoengineObjectType(ObjectType):
         if isinstance(root, cls):
             return True
         # XXX: Take care FileField
-        if isinstance(root, mongoengine.GridFSProxy):
+        if isinstance(root, motorengine.GridFSProxy):
             return True
-        if not is_valid_mongoengine_model(type(root)):
+        if not is_valid_motorengine_model(type(root)):
             raise Exception(('Received incompatible instance "{}".').format(root))
         return isinstance(root, cls._meta.model)
 

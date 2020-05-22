@@ -881,7 +881,7 @@ def test_should_get_queryset_returns_qs_filters(fixtures):
     assert result.data == expected
 
 
-def test_should_filter_mongoengine_queryset(fixtures):
+def test_should_filter_motorengine_queryset(fixtures):
     class Query(graphene.ObjectType):
         players = MongoengineConnectionField(nodes.PlayerNode)
 
@@ -943,7 +943,7 @@ def test_should_query_document_with_embedded(fixtures):
     assert not result.errors
 
 
-def test_should_filter_mongoengine_queryset_with_list(fixtures):
+def test_should_filter_motorengine_queryset_with_list(fixtures):
     class Query(graphene.ObjectType):
         players = MongoengineConnectionField(nodes.PlayerNode)
 

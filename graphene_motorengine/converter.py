@@ -1,10 +1,10 @@
 import graphene
-import mongoengine
+import motorengine
 import uuid
 
 from graphene.types.json import JSONString
-from mongoengine.base import get_document
 
+from .patch import get_document
 from . import advanced_types
 from .utils import import_single_dispatch, get_field_description
 
@@ -16,93 +16,93 @@ class MongoEngineConversionError(Exception):
 
 
 @singledispatch
-def convert_mongoengine_field(field, registry=None):
+def convert_motorengine_field(field, registry=None):
     raise MongoEngineConversionError(
         "Don't know how to convert the MongoEngine field %s (%s)"
         % (field, field.__class__)
     )
 
 
-@convert_mongoengine_field.register(mongoengine.EmailField)
-@convert_mongoengine_field.register(mongoengine.StringField)
-@convert_mongoengine_field.register(mongoengine.URLField)
+@convert_motorengine_field.register(motorengine.EmailField)
+@convert_motorengine_field.register(motorengine.StringField)
+@convert_motorengine_field.register(motorengine.URLField)
 def convert_field_to_string(field, registry=None):
     return graphene.String(
         description=get_field_description(field, registry), required=field.required
     )
 
 
-@convert_mongoengine_field.register(mongoengine.UUIDField)
-@convert_mongoengine_field.register(mongoengine.ObjectIdField)
+@convert_motorengine_field.register(motorengine.UUIDField)
+@convert_motorengine_field.register(motorengine.ObjectIdField)
 def convert_field_to_id(field, registry=None):
     return graphene.ID(
         description=get_field_description(field, registry), required=field.required
     )
 
 
-@convert_mongoengine_field.register(mongoengine.IntField)
-@convert_mongoengine_field.register(mongoengine.LongField)
-@convert_mongoengine_field.register(mongoengine.SequenceField)
+@convert_motorengine_field.register(motorengine.IntField)
+@convert_motorengine_field.register(motorengine.LongField)
+@convert_motorengine_field.register(motorengine.SequenceField)
 def convert_field_to_int(field, registry=None):
     return graphene.Int(
         description=get_field_description(field, registry), required=field.required
     )
 
 
-@convert_mongoengine_field.register(mongoengine.BooleanField)
+@convert_motorengine_field.register(motorengine.BooleanField)
 def convert_field_to_boolean(field, registry=None):
     return graphene.Boolean(
         description=get_field_description(field, registry), required=field.required
     )
 
 
-@convert_mongoengine_field.register(mongoengine.DecimalField)
-@convert_mongoengine_field.register(mongoengine.FloatField)
+@convert_motorengine_field.register(motorengine.DecimalField)
+@convert_motorengine_field.register(motorengine.FloatField)
 def convert_field_to_float(field, registry=None):
     return graphene.Float(
         description=get_field_description(field, registry), required=field.required
     )
 
 
-@convert_mongoengine_field.register(mongoengine.DateTimeField)
+@convert_motorengine_field.register(motorengine.DateTimeField)
 def convert_field_to_datetime(field, registry=None):
     return graphene.DateTime(
         description=get_field_description(field, registry), required=field.required
     )
 
 
-@convert_mongoengine_field.register(mongoengine.DictField)
-@convert_mongoengine_field.register(mongoengine.MapField)
+@convert_motorengine_field.register(motorengine.DictField)
+@convert_motorengine_field.register(motorengine.MapField)
 def convert_field_to_jsonstring(field, registry=None):
     return JSONString(
         description=get_field_description(field, registry), required=field.required
     )
 
 
-@convert_mongoengine_field.register(mongoengine.PointField)
+@convert_motorengine_field.register(motorengine.PointField)
 def convert_point_to_field(field, registry=None):
     return graphene.Field(advanced_types.PointFieldType)
 
 
-@convert_mongoengine_field.register(mongoengine.PolygonField)
+@convert_motorengine_field.register(motorengine.PolygonField)
 def convert_polygon_to_field(field, registry=None):
     return graphene.Field(advanced_types.PolygonFieldType)
 
 
-@convert_mongoengine_field.register(mongoengine.MultiPolygonField)
+@convert_motorengine_field.register(motorengine.MultiPolygonField)
 def convert_multipolygon_to_field(field, register=None):
     return graphene.Field(advanced_types.MultiPolygonFieldType)
 
 
-@convert_mongoengine_field.register(mongoengine.FileField)
+@convert_motorengine_field.register(motorengine.FileField)
 def convert_file_to_field(field, registry=None):
     return graphene.Field(advanced_types.FileFieldType)
 
 
-@convert_mongoengine_field.register(mongoengine.ListField)
-@convert_mongoengine_field.register(mongoengine.EmbeddedDocumentListField)
+@convert_motorengine_field.register(motorengine.ListField)
+@convert_motorengine_field.register(motorengine.EmbeddedDocumentListField)
 def convert_field_to_list(field, registry=None):
-    base_type = convert_mongoengine_field(field.field, registry=registry)
+    base_type = convert_motorengine_field(field.field, registry=registry)
     if isinstance(base_type, graphene.Field):
         return graphene.List(
             base_type._type,
@@ -119,7 +119,7 @@ def convert_field_to_list(field, registry=None):
         return base_type._meta.connection_field_class(base_type)
 
     # Non-relationship field
-    relations = (mongoengine.ReferenceField, mongoengine.EmbeddedDocumentField)
+    relations = (motorengine.ReferenceField, motorengine.EmbeddedDocumentField)
     if not isinstance(base_type, (graphene.List, graphene.NonNull)) and not isinstance(
         field.field, relations
     ):
@@ -132,18 +132,18 @@ def convert_field_to_list(field, registry=None):
     )
 
 
-@convert_mongoengine_field.register(mongoengine.GenericEmbeddedDocumentField)
-@convert_mongoengine_field.register(mongoengine.GenericReferenceField)
+@convert_motorengine_field.register(motorengine.GenericEmbeddedDocumentField)
+@convert_motorengine_field.register(motorengine.GenericReferenceField)
 def convert_field_to_union(field, registry=None):
 
     _types = []
     for choice in field.choices:
-        if isinstance(field, mongoengine.GenericReferenceField):
-            _field = mongoengine.ReferenceField(get_document(choice))
-        elif isinstance(field, mongoengine.GenericEmbeddedDocumentField):
-            _field = mongoengine.EmbeddedDocumentField(choice)
+        if isinstance(field, motorengine.GenericReferenceField):
+            _field = motorengine.ReferenceField(get_document(choice))
+        elif isinstance(field, motorengine.GenericEmbeddedDocumentField):
+            _field = motorengine.EmbeddedDocumentField(choice)
 
-        _field = convert_mongoengine_field(_field, registry)
+        _field = convert_motorengine_field(_field, registry)
         _type = _field.get_type()
         if _type:
             _types.append(_type.type)
@@ -165,9 +165,9 @@ def convert_field_to_union(field, registry=None):
     return graphene.Field(_union)
 
 
-@convert_mongoengine_field.register(mongoengine.EmbeddedDocumentField)
-@convert_mongoengine_field.register(mongoengine.ReferenceField)
-@convert_mongoengine_field.register(mongoengine.CachedReferenceField)
+@convert_motorengine_field.register(motorengine.EmbeddedDocumentField)
+@convert_motorengine_field.register(motorengine.ReferenceField)
+@convert_motorengine_field.register(motorengine.CachedReferenceField)
 def convert_field_to_dynamic(field, registry=None):
     model = field.document_type
 
@@ -180,7 +180,7 @@ def convert_field_to_dynamic(field, registry=None):
     return graphene.Dynamic(dynamic_type)
 
 
-@convert_mongoengine_field.register(mongoengine.LazyReferenceField)
+@convert_motorengine_field.register(motorengine.LazyReferenceField)
 def convert_lazy_field_to_dynamic(field, registry=None):
     model = field.document_type
 

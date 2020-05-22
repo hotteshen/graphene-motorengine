@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 import inspect
 from collections import OrderedDict
 
-import mongoengine
+import motorengine
 from graphene import Node
 from graphene.utils.trim_docstring import trim_docstring
 
@@ -24,17 +24,17 @@ def get_model_reference_fields(model, excluding=None):
     for attr_name, attr in model._fields.items():
         if attr_name in excluding or not isinstance(
             attr,
-            (mongoengine.fields.ReferenceField, mongoengine.fields.LazyReferenceField),
+            (motorengine.fields.ReferenceField, motorengine.fields.LazyReferenceField),
         ):
             continue
         attributes[attr_name] = attr
     return attributes
 
 
-def is_valid_mongoengine_model(model):
+def is_valid_motorengine_model(model):
     return inspect.isclass(model) and (
-        issubclass(model, mongoengine.Document)
-        or issubclass(model, mongoengine.EmbeddedDocument)
+        issubclass(model, motorengine.Document)
+        or issubclass(model, motorengine.EmbeddedDocument)
     )
 
 
@@ -76,7 +76,7 @@ def get_field_description(field, registry=None):
     """
     Common metadata includes verbose_name and help_text.
 
-    http://docs.mongoengine.org/apireference.html#fields
+    http://docs.motorengine.org/apireference.html#fields
     """
     parts = []
     if hasattr(field, "document_type"):

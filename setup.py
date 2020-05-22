@@ -21,11 +21,11 @@ setup(
         "Programming Language :: Python :: Implementation :: PyPy",
         "License :: OSI Approved :: MIT License",
     ],
-    keywords="api graphql protocol rest relay graphene mongo mongoengine",
+    keywords="api graphql protocol rest relay graphene mongo motorengine",
     packages=find_packages(exclude=["tests"]),
     install_requires=[
         "graphene>=2.1.3,<3",
-        "mongoengine>=0.15.0",
+        "motorengine>=0.15.0",
         "singledispatch>=3.4.0.3",
         "iso8601>=0.1.12",
     ],
