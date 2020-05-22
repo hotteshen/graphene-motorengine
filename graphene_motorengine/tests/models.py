@@ -4,9 +4,9 @@ from mongomock import gridfs
 
 gridfs.enable_gridfs_integration()
 mongoengine.connect(
-    "graphene-mongo-test", host="mongomock://localhost", alias="default"
+    "graphene-motorengine-test", host="mongomock://localhost", alias="default"
 )
-# mongoengine.connect('graphene-mongo-test', host='mongodb://localhost/graphene-mongo-dev')
+# mongoengine.connect('graphene-motorengine-test', host='mongodb://localhost/graphene-motorengine-dev')
 
 
 class Publisher(mongoengine.Document):

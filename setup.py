@@ -1,11 +1,11 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="graphene-mongo",
+    name="graphene-motorengine",
     version="0.2.12",
     description="Graphene Mongoengine integration",
     long_description=open("README.rst").read(),
-    url="https://github.com/graphql-python/graphene-mongo",
+    url="https://github.com/graphql-python/graphene-motorengine",
     author="Abaw Chen",
     author_email="abaw.chen@gmail.com",
     license="MIT",

@@ -6,7 +6,7 @@ from graphene.relay import Connection, Node
 from graphene.types.objecttype import ObjectType, ObjectTypeOptions
 from graphene.types.utils import yank_fields_from_attrs
 
-from graphene_mongo import MongoengineConnectionField
+from graphene_motorengine import MongoengineConnectionField
 from .converter import convert_mongoengine_field
 from .registry import Registry, get_global_registry
 from .utils import get_model_fields, is_valid_mongoengine_model
@@ -16,7 +16,7 @@ def construct_fields(model, registry, only_fields, exclude_fields):
     """
     Args:
         model (mongoengine.Document):
-        registry (graphene_mongo.registry.Registry):
+        registry (graphene_motorengine.registry.Registry):
         only_fields ([str]):
         exclude_fields ([str]):
 

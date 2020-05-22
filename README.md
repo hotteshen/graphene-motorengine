@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/graphql-python/graphene-mongo.svg?branch=master)](https://travis-ci.org/graphql-python/graphene-mongo) [![Coverage Status](https://coveralls.io/repos/github/graphql-python/graphene-mongo/badge.svg?branch=master)](https://coveralls.io/github/graphql-python/graphene-mongo?branch=master) [![Documentation Status](https://readthedocs.org/projects/graphene-mongo/badge/?version=latest)](http://graphene-mongo.readthedocs.io/en/latest/?badge=latest) [![PyPI version](https://badge.fury.io/py/graphene-mongo.svg)](https://badge.fury.io/py/graphene-mongo) [![PyPI pyversions](https://img.shields.io/pypi/pyversions/graphene-mongo.svg)](https://pypi.python.org/pypi/graphene-mongo/) [![Downloads](https://pepy.tech/badge/graphene-mongo)](https://pepy.tech/project/graphene-mongo)
+[![Build Status](https://travis-ci.org/graphql-python/graphene-motorengine.svg?branch=master)](https://travis-ci.org/graphql-python/graphene-motorengine) [![Coverage Status](https://coveralls.io/repos/github/graphql-python/graphene-motorengine/badge.svg?branch=master)](https://coveralls.io/github/graphql-python/graphene-motorengine?branch=master) [![Documentation Status](https://readthedocs.org/projects/graphene-motorengine/badge/?version=latest)](http://graphene-motorengine.readthedocs.io/en/latest/?badge=latest) [![PyPI version](https://badge.fury.io/py/graphene-motorengine.svg)](https://badge.fury.io/py/graphene-motorengine) [![PyPI pyversions](https://img.shields.io/pypi/pyversions/graphene-motorengine.svg)](https://pypi.python.org/pypi/graphene-motorengine/) [![Downloads](https://pepy.tech/badge/graphene-motorengine)](https://pepy.tech/project/graphene-motorengine)
 
 # Graphene-Mongo
 
@@ -7,10 +7,10 @@ A [Mongoengine](https://mongoengine-odm.readthedocs.io/) integration for [Graphe
 
 ## Installation
 
-For installing graphene-mongo, just run this command in your shell
+For installing graphene-motorengine, just run this command in your shell
 
 ```
-pip install graphene-mongo
+pip install graphene-motorengine
 ```
 
 ## Examples
@@ -32,7 +32,7 @@ To create a GraphQL schema for it you simply have to write the following:
 ```python
 import graphene
 
-from graphene_mongo import MongoengineObjectType
+from graphene_motorengine import MongoengineObjectType
 
 from .models import User as UserModel
 

@@ -5,7 +5,7 @@
 _build/
 build/
 dist/
-graphene_mongo.egg-info/
+graphene_motorengine.egg-info/
 htmlcov/
 *.pyc
 *.swo
